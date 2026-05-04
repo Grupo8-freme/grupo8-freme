@@ -8,6 +8,17 @@ O objetivo é padronizar o atendimento, melhorar a rastreabilidade dos serviços
 
 ---
 
+## 📋 Sumário
+1. [Visão Geral do Sistema](#visão-geral-do-sistema)
+2. [Fluxo de Atendimento (Workflow)](#fluxo-de-atendimento-workflow)
+3. [Estrutura de Dados](#estrutura-de-dados)
+4. [Módulos do Sistema](#módulos-do-sistema)
+5. [Exemplo de Ordem de Serviço (OS)](#exemplo-de-ordem-de-serviço-os)
+6. [Boas Práticas de Implementação](#boas-práticas-de-implementação)
+7. [Contribuição](#contribuição)
+
+---
+
 ## 🎯 Objetivos do Sistema
 
 - Centralizar o registro de atendimentos
@@ -60,17 +71,17 @@ A **ordem de serviço** é o documento formal que autoriza e descreve a execuç�
    ↓
 6. AVALIAÇÃO DO CLIENTE
 
-## 🔄 Fluxo de Atendimento
+## 🔄 Fluxo de Atendimento (Workflow)
 
+O ciclo de vida do atendimento é dividido em 5 etapas principais:
 
-A --> [Cliente abre Ticket] --> B[Triagem]
-B --> C{Necessita intervenção técnica?}
-C -- Sim --> D[Gerar Ordem de Serviço]
-C -- Não --> E[Resolver e Encerrar Ticket]
-D --> F[Execução do Serviço]
-F --> G[Testes e Validação]
-G --> H[Entrega ao Cliente]
-H --> I[Encerramento da OS]
+1. **Abertura do Ticket:** Registro da solicitação pelo cliente via canal (telefone, e-mail ou portal).
+2. **Triagem e Diagnóstico:** Análise inicial da equipe de suporte para definir a prioridade e natureza do problema.
+3. **Aprovação de Orçamento:** Caso o reparo exija peças não cobertas ou seja fora de garantia, é gerado um orçamento para aprovação.
+4. **Execução do Serviço:** O técnico realiza os procedimentos necessários (reparo, troca de componentes, testes).
+5. **Encerramento e Feedback:** Finalização da OS, baixa no estoque de peças e pesquisa de satisfação.
+
+---
 
 
 - ID: TCK-001
@@ -84,26 +95,65 @@ H --> I[Encerramento da OS]
 
 
 
-##Estrutura de pasta
+## 💾 Estrutura de Dados
 
-sistema-assistencia-tecnica/
-├── backend/
-│   ├── src/
-│   │   ├── modules/
-│   │   │   ├── tickets/
-│   │   │   ├── ordens-servico/
-│   │   │   ├── clientes/
-│   │   │   └── ...
-│   │   ├── shared/
-│   │   └── config/
-│   ├── prisma/
-│   └── tests/
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── hooks/
-│   │   └── utils/
-├── docs/
-├── docker/
-└── scripts/
+Abaixo estão as principais entidades do banco de dados relacional que suportam este sistema:
+
+### 1. Tabela: `clientes`
+* `id` (INT, PK)
+* `nome` (VARCHAR)
+* `telefone` (VARCHAR)
+* `email` (VARCHAR)
+* `endereco` (VARCHAR)
+
+### 2. Tabela: `tickets`
+* `id` (INT, PK)
+* `cliente_id` (INT, FK)
+* `titulo` (VARCHAR)
+* `descricao` (TEXT)
+* `status` (ENUM: 'Aberto', 'Em Andamento', 'Aguardando Peças', 'Concluído')
+* `data_abertura` (DATETIME)
+
+### 3. Tabela: `ordens_servico` (OS)
+* `id` (INT, PK)
+* `ticket_id` (INT, FK)
+* `data_inicio` (DATETIME)
+* `data_fim` (DATETIME)
+* `valor_servico` (DECIMAL)
+* `status_os` (ENUM: 'Diagnóstico', 'Aprovando Orçamento', 'Em Execução', 'Finalizado')
+
+### 4. Tabela: `pecas_os`
+* `id` (INT, PK)
+* `os_id` (INT, FK)
+* `nome_peca` (VARCHAR)
+* `quantidade` (INT)
+* `valor_unitario` (DECIMAL)
+
+---
+
+## 📄 Exemplo de Ordem de Serviço (OS)
+
+O modelo textual abaixo representa a visualização padrão de uma OS em um terminal ou sistema legado:
+
+```text
+┌──────────────────────────────────────────────────────────────┐
+│  ⚙️ OS #245 - Maria Silva - Ar-Condicionado                  │
+├──────────────────────────────────────────────────────────────┤
+│  👤 CLIENTE: Maria Silva           📞 (11)99999-1234         │
+│  📍 ENDEREÇO: Rua das Flores, 123 - SP                    🗺️ │
+│  📅 DATA: 14/12/2024  09:30                                  ⏰ │
+│                                                              │
+│  🔧 SERVIÇO:                                                 │
+│  [x] Diagnóstico realizado                                   │
+│  [x] Troca de capacitor                                      │
+│  [ ] Recarga gás (aguardando aprova.)                        │
+│  [ ] Teste final                                             │
+│                                                              │
+│  🛠️ PEÇAS UTILIZADAS:                                        │
+│  ┌──────────────┬──────┬──────────┐                          │
+│  │ Capacitor    │ 1 un │ R$45,00  │                          │
+│  │ Freon R410A  │ 1 kg │ R$120,00 │                          │
+│  └──────────────┴──────┴──────────┘                          │
+│                                                              │
+│  💰 TOTAL: R$ 285,00  [ENVIAR ORÇAMENTO] [INICIAR SERVIÇO]   │
+└──────────────────────────────────────────────────────────────┘
