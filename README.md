@@ -18,6 +18,30 @@ O objetivo é padronizar o atendimento, melhorar a rastreabilidade dos serviços
 7. [Contribuição](#contribuição)
 
 ---
+Descrição da Automação
+O sistema automatiza o ciclo de vida do atendimento técnico, permitindo que a equipe foque na execução do serviço enquanto a parte burocrática é executada em segundo plano.
+
+Principais benefícios da automação:
+
+Agilidade: Geração automática da Ordem de Serviço em formato de texto estruturado.
+
+Comunicação: Envio instantâneo de atualizações para o cliente por meio de canais de mensagem.
+
+Organização: Atualização em tempo real do banco de dados e controle do status do equipamento.
+
+---
+⚙️Explicação do Fluxo criado no n8n
+O workflow no n8n é dividido em quatro etapas executadas sequencialmente:
+
+Webhook (Trigger de Entrada): Recebe o evento de abertura ou atualização de um ticket (ex: "Diagnóstico realizado").
+
+Transformação de Dados (Code): Concatena as informações do cliente, equipamentos e peças utilizadas no formato de Ordem de Serviço textual.
+
+Consulta de Serviços (Switch/Router): Define a próxima ação com base no status atual (ex: enviar orçamento ou iniciar o serviço).
+
+Notificação / Documentação: Exporta o arquivo para PDF e dispara a notificação para o cliente via API de comunicação.
+
+---
 
 ## 🎯 Objetivos do Sistema
 
