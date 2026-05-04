@@ -62,9 +62,8 @@ A **ordem de serviço** é o documento formal que autoriza e descreve a execuç�
 
 ## 🔄 Fluxo de Atendimento
 
-```mermaid
-graph TD
-A[Cliente abre Ticket] --> B[Triagem]
+
+A --> [Cliente abre Ticket] --> B[Triagem]
 B --> C{Necessita intervenção técnica?}
 C -- Sim --> D[Gerar Ordem de Serviço]
 C -- Não --> E[Resolver e Encerrar Ticket]
