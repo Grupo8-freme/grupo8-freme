@@ -131,6 +131,12 @@
         "assignments": {
           "assignments": [
             {
+              "id": "53b16711-6757-47e9-aede-c9f615d1352a",
+              "name": "ticket_id",
+              "value": "=TCK-{{$now.format(\"ddMMyyyyHHmmss\")}}",
+              "type": "string"
+            },
+            {
               "id": "cf55c330-e552-4c51-8e0b-aab21a84809e",
               "name": "nome_cliente",
               "value": "={{ $json.Nome }}",
@@ -171,6 +177,12 @@
               "name": "anexos_chamados",
               "value": "={{ $json.Anexos }}",
               "type": "string"
+            },
+            {
+              "id": "2dbad1b7-1602-48b9-b43c-0344cff2d1d7",
+              "name": "data",
+              "value": "={{$now.format(\"dd/MM/yyyy\")}}",
+              "type": "string"
             }
           ]
         },
@@ -198,6 +210,11 @@
           }
         ]
       ]
+    },
+    "Edit Fields": {
+      "main": [
+        []
+      ]
     }
   },
   "active": false,
@@ -206,8 +223,9 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "870b541f-66b5-46b7-bbba-0c2b1b7ae79c",
+  "versionId": "5b94782a-05f8-45ac-a505-7e4f7c3e8e8c",
   "meta": {
+    "templateCredsSetupCompleted": true,
     "instanceId": "13c0903ef080423e523bd36f53ad8390db01e317a8a98d97d7f8c1610427a090"
   },
   "id": "PCGatnCpiFtXXhg6",
