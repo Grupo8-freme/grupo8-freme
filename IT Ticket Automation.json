@@ -1,0 +1,215 @@
+{
+  "name": "IT Ticket Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Receber chamado",
+        "formDescription": "Utilize este formulário para registrar solicitações, incidentes ou dúvidas relacionadas à área de TI. Preencha as informações com o máximo de detalhes possível para agilizar o atendimento.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nome",
+              "placeholder": "Informe seu nome",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "E-mail",
+              "fieldType": "email"
+            },
+            {
+              "fieldLabel": "Tipo de chamado",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Incidente"
+                  },
+                  {
+                    "option": "Requisição"
+                  },
+                  {
+                    "option": "Acesso"
+                  },
+                  {
+                    "option": "Dúvida"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Criticidade",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Baixa"
+                  },
+                  {
+                    "option": "Média"
+                  },
+                  {
+                    "option": "Alta"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Categoria",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Sistema"
+                  },
+                  {
+                    "option": "Redes"
+                  },
+                  {
+                    "option": "Servidores"
+                  },
+                  {
+                    "option": "Acesso"
+                  },
+                  {
+                    "option": "Outros"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Descrição do chamado",
+              "fieldType": "textarea",
+              "placeholder": "Informe o problema",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Anexos",
+              "fieldType": "file"
+            }
+          ]
+        },
+        "responseMode": "lastNode",
+        "options": {
+          "buttonLabel": "Abrir chamado",
+          "respondWithOptions": {
+            "values": {
+              "formSubmittedText": "Seu chamado foi aberto!"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c0cd3334-5757-4112-93ba-b775ceade99f",
+      "name": "On form submission",
+      "webhookId": "4da38a0b-e925-4bb2-8c90-5301fa798dbc"
+    },
+    {
+      "parameters": {
+        "content": "## Abertura de Ticket",
+        "height": 224,
+        "width": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -96,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "25e2819e-e350-4ae9-999c-4f430eab8b21",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cf55c330-e552-4c51-8e0b-aab21a84809e",
+              "name": "nome_cliente",
+              "value": "={{ $json.Nome }}",
+              "type": "string"
+            },
+            {
+              "id": "7daa2d6e-ab38-4ddf-be4d-b9f7cba7025b",
+              "name": "email_cliente",
+              "value": "={{ $json['E-mail'] }}",
+              "type": "string"
+            },
+            {
+              "id": "7d82c274-aba3-4c55-9047-6e60129cede3",
+              "name": "tipo_chamado",
+              "value": "={{ $json['Tipo de chamado'] }}",
+              "type": "string"
+            },
+            {
+              "id": "95cfea45-a2fe-4c05-b99d-98f581207340",
+              "name": "criticidade_chamado",
+              "value": "={{ $json.Criticidade }}",
+              "type": "string"
+            },
+            {
+              "id": "c2414132-a101-49fe-9a20-bbfd71c7233e",
+              "name": "categoria_chamado",
+              "value": "={{ $json.Categoria }}",
+              "type": "string"
+            },
+            {
+              "id": "8d36e6f0-aa6c-4733-bafb-3ed3920aa81d",
+              "name": "descricao_chamado",
+              "value": "={{ $json['Descrição do chamado'] }}",
+              "type": "string"
+            },
+            {
+              "id": "3b79ff30-fc02-414f-8158-32681b8063ce",
+              "name": "anexos_chamados",
+              "value": "={{ $json.Anexos }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        0
+      ],
+      "id": "f7b48039-1303-425b-afe8-347466e47f30",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "870b541f-66b5-46b7-bbba-0c2b1b7ae79c",
+  "meta": {
+    "instanceId": "13c0903ef080423e523bd36f53ad8390db01e317a8a98d97d7f8c1610427a090"
+  },
+  "id": "PCGatnCpiFtXXhg6",
+  "tags": []
+}
