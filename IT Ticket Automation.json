@@ -1,5 +1,4 @@
 {
-  "name": "IT Ticket Automation",
   "nodes": [
     {
       "parameters": {
@@ -104,12 +103,12 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.5,
       "position": [
-        0,
-        0
+        16,
+        96
       ],
-      "id": "c0cd3334-5757-4112-93ba-b775ceade99f",
+      "id": "445a70aa-d89d-49e2-b974-6ab21e3372af",
       "name": "On form submission",
-      "webhookId": "4da38a0b-e925-4bb2-8c90-5301fa798dbc"
+      "webhookId": "e6f9ad2b-3f63-4469-9293-123f757ba6e4"
     },
     {
       "parameters": {
@@ -119,11 +118,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -96,
-        -64
+        -80,
+        32
       ],
       "typeVersion": 1,
-      "id": "25e2819e-e350-4ae9-999c-4f430eab8b21",
+      "id": "df0523e1-2dc0-4ab2-ae47-87f9c73e4305",
       "name": "Sticky Note"
     },
     {
@@ -133,7 +132,7 @@
             {
               "id": "53b16711-6757-47e9-aede-c9f615d1352a",
               "name": "ticket_id",
-              "value": "=TCK-{{$now.format(\"ddMMyyyyHHmmss\")}}",
+              "value": "=T{{ $now.format(' yy MM ') }}{{ ($itemIndex + 1).toString().padStart(4, '0') }}",
               "type": "string"
             },
             {
@@ -191,14 +190,32 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        272,
-        0
+        288,
+        96
       ],
-      "id": "f7b48039-1303-425b-afe8-347466e47f30",
+      "id": "d0223f65-4430-4fa0-b5ac-5a11935b0d1f",
       "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        496,
+        96
+      ],
+      "id": "62ea42a3-2880-4c8a-b63e-60ed112698d5",
+      "name": "Create a database page"
     }
   ],
-  "pinData": {},
   "connections": {
     "On form submission": {
       "main": [
@@ -213,21 +230,19 @@
     },
     "Edit Fields": {
       "main": [
-        []
+        [
+          {
+            "node": "Create a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
-  "active": false,
-  "settings": {
-    "executionOrder": "v1",
-    "binaryMode": "separate",
-    "availableInMCP": false
-  },
-  "versionId": "5b94782a-05f8-45ac-a505-7e4f7c3e8e8c",
+  "pinData": {},
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "13c0903ef080423e523bd36f53ad8390db01e317a8a98d97d7f8c1610427a090"
-  },
-  "id": "PCGatnCpiFtXXhg6",
-  "tags": []
+    "instanceId": "ea45a93c74e7627e75b0a0b01e1a4d93e33e120c3a584a9d36107e9cad6743d5"
+  }
 }
