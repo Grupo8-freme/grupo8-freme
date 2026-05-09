@@ -99,12 +99,12 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.5,
       "position": [
-        -256,
-        -32
+        832,
+        512
       ],
-      "id": "272d747a-ae23-4f24-906b-9e328d318999",
+      "id": "67b65a09-9e07-4f29-b219-41967471dbb5",
       "name": "On form submission",
-      "webhookId": "faef12f9-5b5c-40fc-a12f-5b131a4d6237"
+      "webhookId": "a7565c51-9692-4546-9c5a-2c6d9941e444"
     },
     {
       "parameters": {
@@ -161,7 +161,7 @@
             {
               "id": "1292f6c2-cee4-4d44-99ca-674f3cb9f3b0",
               "name": "prazo_estimado",
-              "value": "={{ $now.plus({ days: 3 }).format('dd/MM/yyyy HH:mm') }}",
+              "value": "={{ $now.plus({ hours: $json.Criticidade === 'Alta' ? 4 : ($json.Criticidade === 'Média' ? 48 : 120) }).format('dd/MM/yyyy HH:mm') }}\n",
               "type": "string"
             }
           ]
@@ -171,10 +171,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -16,
-        -32
+        1072,
+        512
       ],
-      "id": "aadfc153-99c7-4006-9f52-9969b97c821f",
+      "id": "6160ed94-d2fb-4bb0-b96a-c9a79a240bae",
       "name": "Edit Fields"
     },
     {
@@ -311,15 +311,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        144,
-        -32
+        1232,
+        512
       ],
-      "id": "24d5235c-9d47-463a-b98c-ef4c63a3dddc",
+      "id": "0a480ad2-316e-4690-b7b3-d793d570bcd0",
       "name": "Append row in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "n0qEaDg6oplovGct",
-          "name": "Google Sheets OAuth2 API"
+          "id": "ITbCEDcFposBbsNn",
+          "name": "Google Sheets account"
         }
       }
     },
@@ -333,16 +333,16 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        144,
-        144
+        1232,
+        688
       ],
-      "id": "a08d30b6-d360-4787-b7c8-4785d45dd087",
+      "id": "a3baa305-73d2-4a01-8482-6e234214fc60",
       "name": "Send a message",
       "webhookId": "fc12c141-1bf1-4eb4-9f90-4efdf39cb01e",
       "credentials": {
         "gmailOAuth2": {
-          "id": "YuTGlN7AnCyST74E",
-          "name": "Gmail OAuth2 API"
+          "id": "v9UFkYMhzSL9LYog",
+          "name": "Gmail account"
         }
       }
     },
@@ -354,11 +354,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -352,
-        -96
+        736,
+        448
       ],
       "typeVersion": 1,
-      "id": "0116990a-afe6-47c9-9287-a92a7251c1ad",
+      "id": "f6873969-7cb0-476a-9754-76af823e9cb7",
       "name": "Sticky Note"
     }
   ],
@@ -389,21 +389,11 @@
           }
         ]
       ]
-    },
-    "Append row in sheet": {
-      "main": [
-        []
-      ]
-    },
-    "Send a message": {
-      "main": [
-        []
-      ]
     }
   },
   "pinData": {},
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "23d5f7d48a67370d6d6c9262de830a5d003633cca8e156735d57debdb99a51e7"
+    "instanceId": "ea45a93c74e7627e75b0a0b01e1a4d93e33e120c3a584a9d36107e9cad6743d5"
   }
 }
