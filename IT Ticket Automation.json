@@ -37,48 +37,6 @@
               "requiredField": true
             },
             {
-              "fieldLabel": "Criticidade",
-              "fieldType": "dropdown",
-              "fieldOptions": {
-                "values": [
-                  {
-                    "option": "Baixa"
-                  },
-                  {
-                    "option": "Média"
-                  },
-                  {
-                    "option": "Alta"
-                  }
-                ]
-              },
-              "requiredField": true
-            },
-            {
-              "fieldLabel": "Categoria",
-              "fieldType": "dropdown",
-              "fieldOptions": {
-                "values": [
-                  {
-                    "option": "Sistema"
-                  },
-                  {
-                    "option": "Redes"
-                  },
-                  {
-                    "option": "Servidores"
-                  },
-                  {
-                    "option": "Acesso"
-                  },
-                  {
-                    "option": "Outros"
-                  }
-                ]
-              },
-              "requiredField": true
-            },
-            {
               "fieldLabel": "Descrição do chamado",
               "fieldType": "textarea",
               "placeholder": "Informe o problema",
@@ -99,12 +57,12 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.5,
       "position": [
-        832,
-        512
+        -448,
+        -32
       ],
-      "id": "67b65a09-9e07-4f29-b219-41967471dbb5",
+      "id": "272d747a-ae23-4f24-906b-9e328d318999",
       "name": "On form submission",
-      "webhookId": "a7565c51-9692-4546-9c5a-2c6d9941e444"
+      "webhookId": "faef12f9-5b5c-40fc-a12f-5b131a4d6237"
     },
     {
       "parameters": {
@@ -113,55 +71,37 @@
             {
               "id": "53b16711-6757-47e9-aede-c9f615d1352a",
               "name": "ticket_id",
-              "value": "=T{{ $now.format(' yy MM ') }}{{ ($itemIndex + 1).toString().padStart(4, '0') }}",
+              "value": "=T{{ $now.format('yyMMdd') + Math.floor(Math.random() * 1000).toString().padStart(3, '0') }}",
               "type": "string"
             },
             {
               "id": "cf55c330-e552-4c51-8e0b-aab21a84809e",
               "name": "nome_cliente",
-              "value": "={{ $json.Nome }}",
+              "value": "={{ $('On form submission').item.json.Nome }}",
               "type": "string"
             },
             {
               "id": "7daa2d6e-ab38-4ddf-be4d-b9f7cba7025b",
               "name": "email_cliente",
-              "value": "={{ $json['E-mail'] }}",
+              "value": "={{ $('On form submission').item.json['E-mail'] }}",
               "type": "string"
             },
             {
               "id": "7d82c274-aba3-4c55-9047-6e60129cede3",
               "name": "tipo_chamado",
-              "value": "={{ $json['Tipo de chamado'] }}",
-              "type": "string"
-            },
-            {
-              "id": "95cfea45-a2fe-4c05-b99d-98f581207340",
-              "name": "criticidade_chamado",
-              "value": "={{ $json.Criticidade }}",
-              "type": "string"
-            },
-            {
-              "id": "c2414132-a101-49fe-9a20-bbfd71c7233e",
-              "name": "categoria_chamado",
-              "value": "={{ $json.Categoria }}",
+              "value": "={{ $('On form submission').item.json['Tipo de chamado'] }}",
               "type": "string"
             },
             {
               "id": "8d36e6f0-aa6c-4733-bafb-3ed3920aa81d",
               "name": "descricao_chamado",
-              "value": "={{ $json['Descrição do chamado'] }}",
+              "value": "={{ $('On form submission').item.json['Descrição do chamado'] }}",
               "type": "string"
             },
             {
               "id": "2dbad1b7-1602-48b9-b43c-0344cff2d1d7",
               "name": "data",
               "value": "={{$now.format(\"dd/MM/yyyy\")}}",
-              "type": "string"
-            },
-            {
-              "id": "1292f6c2-cee4-4d44-99ca-674f3cb9f3b0",
-              "name": "prazo_estimado",
-              "value": "={{ $now.plus({ hours: $json.Criticidade === 'Alta' ? 4 : ($json.Criticidade === 'Média' ? 48 : 120) }).format('dd/MM/yyyy HH:mm') }}\n",
               "type": "string"
             }
           ]
@@ -171,10 +111,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1072,
-        512
+        -192,
+        -32
       ],
-      "id": "6160ed94-d2fb-4bb0-b96a-c9a79a240bae",
+      "id": "aadfc153-99c7-4006-9f52-9969b97c821f",
       "name": "Edit Fields"
     },
     {
@@ -197,14 +137,14 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "Ticket ID": "={{ $json.ticket_id }}",
-            "Nome": "={{ $json.nome_cliente }}",
-            "Data": "={{ $json.data }}",
-            "Email": "={{ $json.email_cliente }}",
-            "Tipo": "={{ $json.tipo_chamado }}",
+            "Ticket ID": "={{ $('Edit Fields').item.json.ticket_id }}",
+            "Nome": "={{ $('Edit Fields').item.json.nome_cliente }}",
+            "Data": "={{ $('Edit Fields').item.json.data }}",
+            "Email": "={{ $('Edit Fields').item.json.email_cliente }}",
+            "Tipo": "={{ $('Edit Fields').item.json.tipo_chamado }}",
             "Criticidade": "={{ $json.criticidade_chamado }}",
             "Categoria": "={{ $json.categoria_chamado }}",
-            "Descrição": "={{ $json.descricao_chamado }}",
+            "Descrição": "={{ $('Edit Fields').item.json.descricao_chamado }}",
             "Status": "Aberto",
             "Prazo": "={{ $json.prazo_estimado }}"
           },
@@ -311,38 +251,38 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1232,
-        512
+        528,
+        -32
       ],
-      "id": "0a480ad2-316e-4690-b7b3-d793d570bcd0",
+      "id": "24d5235c-9d47-463a-b98c-ef4c63a3dddc",
       "name": "Append row in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "ITbCEDcFposBbsNn",
-          "name": "Google Sheets account"
+          "id": "n0qEaDg6oplovGct",
+          "name": "Google Sheets OAuth2 API"
         }
       }
     },
     {
       "parameters": {
-        "sendTo": "={{ $json.email_cliente }}",
-        "subject": "=Ticket {{ $json.ticket_id }}",
-        "message": "=<h1>Olá, {{ $json.nome_cliente }}!</h1>\n<p>Recebemos sua solicitação com sucesso.</p>\n<div style=\"background: #f4f4f4; padding: 10px;\">\n   <strong>Número do seu Ticket:</strong> {{ $json.ticket_id }}\n</div>\n<p>Nossa equipe entrará em contato em breve.</p>",
+        "sendTo": "={{ $('Edit Fields').item.json.email_cliente }}",
+        "subject": "=Ticket {{ $('Edit Fields').item.json.ticket_id }}",
+        "message": "=<h1>Olá, {{ $('Edit Fields').item.json.nome_cliente }}!</h1>\n<p>Recebemos sua solicitação com sucesso.</p>\n<div style=\"background: #f4f4f4; padding: 10px;\">\n   <strong>Número do seu Ticket:</strong> {{ $('Edit Fields').item.json.ticket_id }}\n</div>\n<p>Nossa equipe entrará em contato em breve.</p>",
         "options": {}
       },
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        1232,
-        688
+        336,
+        -192
       ],
-      "id": "a3baa305-73d2-4a01-8482-6e234214fc60",
+      "id": "a08d30b6-d360-4787-b7c8-4785d45dd087",
       "name": "Send a message",
       "webhookId": "fc12c141-1bf1-4eb4-9f90-4efdf39cb01e",
       "credentials": {
         "gmailOAuth2": {
-          "id": "v9UFkYMhzSL9LYog",
-          "name": "Gmail account"
+          "id": "YuTGlN7AnCyST74E",
+          "name": "Gmail OAuth2 API"
         }
       }
     },
@@ -354,12 +294,53 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        736,
-        448
+        -544,
+        -96
       ],
       "typeVersion": 1,
-      "id": "f6873969-7cb0-476a-9754-76af823e9cb7",
+      "id": "0116990a-afe6-47c9-9287-a92a7251c1ad",
       "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=Você é um analista de suporte de TI.\n\nAnalise o chamado abaixo.\n\nTipo:\n{{ $json.tipo_chamado }}\n\nDescrição:\n{{ $json.descricao_chamado }}\n\nRetorne SOMENTE em JSON:\n\n{\n  \"categoria_chamado\": \"\",\n  \"criticidade_chamado\": \"\",\n  \"prazo_estimado\": \"\"\n}\n\nRegras:\n- Problemas em servidor, rede corporativa ou sistema parado = Crítica\n- Problemas afetando vários usuários = Alta\n- Problemas simples individuais = Baixa\n- Criticidade e prazo:Baixa\t72h, Média\t24h, Alta\t4h, Crítica\t1h\n- Criticidade apenas: Baixa, Média, Alta e Crítica"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        -16,
+        -32
+      ],
+      "id": "76831432-679e-4744-ad47-a17fb7ad04a9",
+      "name": "Message a model",
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.first().json.output[0].content[0].text;\n\nconst cleaned = raw\n  .replace(/```json/g, '')\n  .replace(/```/g, '')\n  .trim();\n\nreturn [\n  {\n    json: JSON.parse(cleaned)\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        -32
+      ],
+      "id": "cf5cea0c-085f-4744-aefe-e370f96fb195",
+      "name": "Code in JavaScript"
     }
   ],
   "connections": {
@@ -378,10 +359,42 @@
       "main": [
         [
           {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
             "node": "Send a message",
             "type": "main",
             "index": 0
           },
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
           {
             "node": "Append row in sheet",
             "type": "main",
@@ -394,6 +407,6 @@
   "pinData": {},
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "ea45a93c74e7627e75b0a0b01e1a4d93e33e120c3a584a9d36107e9cad6743d5"
+    "instanceId": "23d5f7d48a67370d6d6c9262de830a5d003633cca8e156735d57debdb99a51e7"
   }
 }
