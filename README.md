@@ -21,17 +21,7 @@ Organização: Atualização em tempo real do banco de dados e controle do statu
 
 ---
 ⚙️Explicação do Fluxo criado no n8n
-O workflow no n8n é dividido em quatro etapas executadas sequencialmente:
-
-Webhook (Trigger de Entrada): Recebe o evento de abertura ou atualização de um ticket (ex: "Diagnóstico realizado").
-
-Transformação de Dados (Code): Concatena as informações do cliente, equipamentos e peças utilizadas no formato de Ordem de Serviço textual.
-
-Validação (IA): Define a criticidade, categoria e prazo de SLA atráves da IA implementada, baseado na descrição informada pelo usuario.
-
-Notificação: Dispara um email para o cliente via API de comunicação no momento da abertura e conclusão da Ordem de Serviço.
-
----
+<img width="1200" height="918" alt="f65239f3-4527-4831-b929-f1d2116551a3" src="https://github.com/user-attachments/assets/f5e910d4-d60e-41b5-a371-38a0530309b8" />
 
 ## 🎯 Objetivos do Sistema
 
@@ -64,6 +54,14 @@ Um **ticket** representa uma solicitação inicial de atendimento. Pode ser aber
 ### 🛠️ Ordem de Serviço (OS)
 
 A **ordem de serviço** é o documento formal que autoriza e descreve a execução de um serviço técnico.
+
+## 🔗 Serviços Integrados
+
+- n8n
+- OpenAI API
+- Gmail API / SMTP
+- Webhook HTTP
+- Banco de dados (caso exista)
 
 #### Características:
 - Contém informações detalhadas
@@ -109,8 +107,3 @@ O ciclo de vida do atendimento é dividido em 4 etapas principais:
 ---
 
 
-## 📄 Representação gráfica do fluxo N8N
-
-O modelo gráfico abaixo exibe o fluxo criado para o sistema de criação e gerenciamento de OS atráves do N8N:
-
-<img width="1200" height="918" alt="f65239f3-4527-4831-b929-f1d2116551a3" src="https://github.com/user-attachments/assets/f5e910d4-d60e-41b5-a371-38a0530309b8" />
