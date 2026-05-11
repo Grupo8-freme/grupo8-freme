@@ -61,7 +61,7 @@ A **ordem de serviço** é o documento formal que autoriza e descreve a execuç�
 - OpenAI API
 - Gmail API / SMTP
 - Webhook HTTP
-- Banco de dados (caso exista)
+- Banco de dados
 
 #### Características:
 - Contém informações detalhadas
