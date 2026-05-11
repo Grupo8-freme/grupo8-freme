@@ -2,70 +2,6 @@
   "nodes": [
     {
       "parameters": {
-        "formTitle": "Abertura de chamado",
-        "formDescription": "Utilize este formulário para registrar solicitações, incidentes ou dúvidas relacionadas à área de TI. Preencha as informações com o máximo de detalhes possível para agilizar o atendimento.",
-        "formFields": {
-          "values": [
-            {
-              "fieldLabel": "Nome",
-              "placeholder": "Informe seu nome",
-              "requiredField": true
-            },
-            {
-              "fieldLabel": "E-mail",
-              "fieldType": "email"
-            },
-            {
-              "fieldLabel": "Tipo de chamado",
-              "fieldType": "dropdown",
-              "fieldOptions": {
-                "values": [
-                  {
-                    "option": "Incidente"
-                  },
-                  {
-                    "option": "Requisição"
-                  },
-                  {
-                    "option": "Acesso"
-                  },
-                  {
-                    "option": "Dúvida"
-                  }
-                ]
-              },
-              "requiredField": true
-            },
-            {
-              "fieldLabel": "Descrição do chamado",
-              "fieldType": "textarea",
-              "placeholder": "Informe o problema",
-              "requiredField": true
-            }
-          ]
-        },
-        "responseMode": "lastNode",
-        "options": {
-          "buttonLabel": "Abrir chamado",
-          "respondWithOptions": {
-            "values": {
-              "formSubmittedText": "Seu chamado foi aberto!"
-            }
-          }
-        }
-      },
-      "type": "n8n-nodes-base.formTrigger",
-      "typeVersion": 2.5,
-      "position": [
-        -448,
-        -32
-      ],
-      "id": "272d747a-ae23-4f24-906b-9e328d318999",
-      "name": "On form submission",
-      "webhookId": "faef12f9-5b5c-40fc-a12f-5b131a4d6237"
-    },
-    {
-      "parameters": {
         "assignments": {
           "assignments": [
             {
@@ -77,31 +13,37 @@
             {
               "id": "cf55c330-e552-4c51-8e0b-aab21a84809e",
               "name": "nome_cliente",
-              "value": "={{ $('On form submission').item.json.Nome }}",
+              "value": "={{ $('Abertura').item.json.Nome }}",
               "type": "string"
             },
             {
               "id": "7daa2d6e-ab38-4ddf-be4d-b9f7cba7025b",
               "name": "email_cliente",
-              "value": "={{ $('On form submission').item.json['E-mail'] }}",
+              "value": "={{ $('Abertura').item.json['E-mail'] }}",
               "type": "string"
             },
             {
               "id": "7d82c274-aba3-4c55-9047-6e60129cede3",
               "name": "tipo_chamado",
-              "value": "={{ $('On form submission').item.json['Tipo de chamado'] }}",
+              "value": "={{ $('Abertura').item.json['Tipo de chamado'] }}",
               "type": "string"
             },
             {
               "id": "8d36e6f0-aa6c-4733-bafb-3ed3920aa81d",
               "name": "descricao_chamado",
-              "value": "={{ $('On form submission').item.json['Descrição do chamado'] }}",
+              "value": "={{ $('Abertura').item.json['Descrição do chamado'] }}",
               "type": "string"
             },
             {
               "id": "2dbad1b7-1602-48b9-b43c-0344cff2d1d7",
               "name": "data",
               "value": "={{$now.format(\"dd/MM/yyyy\")}}",
+              "type": "string"
+            },
+            {
+              "id": "c9951a53-2e9f-4b0c-98ea-9ba75ebac1bb",
+              "name": "status_chamado",
+              "value": "Aberto",
               "type": "string"
             }
           ]
@@ -111,8 +53,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -192,
-        -32
+        -176,
+        -80
       ],
       "id": "aadfc153-99c7-4006-9f52-9969b97c821f",
       "name": "Edit Fields"
@@ -129,24 +71,24 @@
         },
         "sheetName": {
           "__rl": true,
-          "value": "gid=0",
+          "value": 663468276,
           "mode": "list",
-          "cachedResultName": "Chamados",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rC-3V3xP41dk6N5m4f0AsgL-2F3mKqHlFRT5lI29By4/edit#gid=0"
+          "cachedResultName": "Abertos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rC-3V3xP41dk6N5m4f0AsgL-2F3mKqHlFRT5lI29By4/edit#gid=663468276"
         },
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
             "Ticket ID": "={{ $('Edit Fields').item.json.ticket_id }}",
-            "Nome": "={{ $('Edit Fields').item.json.nome_cliente }}",
             "Data": "={{ $('Edit Fields').item.json.data }}",
+            "Nome": "={{ $('Edit Fields').item.json.nome_cliente }}",
             "Email": "={{ $('Edit Fields').item.json.email_cliente }}",
             "Tipo": "={{ $('Edit Fields').item.json.tipo_chamado }}",
-            "Criticidade": "={{ $json.criticidade_chamado }}",
             "Categoria": "={{ $json.categoria_chamado }}",
-            "Descrição": "={{ $('Edit Fields').item.json.descricao_chamado }}",
-            "Status": "Aberto",
-            "Prazo": "={{ $json.prazo_estimado }}"
+            "Criticidade": "={{ $json.criticidade_chamado }}",
+            "Prazo": "={{ $json.prazo_estimado }}",
+            "Status": "={{ $('Edit Fields').item.json.status_chamado }}",
+            "Descrição": "={{ $('Edit Fields').item.json.descricao_chamado }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -229,8 +171,7 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
               "id": "Prazo",
@@ -239,8 +180,25 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Responsável",
+              "displayName": "Responsável",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Notas",
+              "displayName": "Notas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
             }
           ],
           "attemptToConvertTypes": false,
@@ -251,8 +209,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        528,
-        -32
+        544,
+        -80
       ],
       "id": "24d5235c-9d47-463a-b98c-ef4c63a3dddc",
       "name": "Append row in sheet",
@@ -273,8 +231,8 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        336,
-        -192
+        352,
+        -240
       ],
       "id": "a08d30b6-d360-4787-b7c8-4785d45dd087",
       "name": "Send a message",
@@ -289,13 +247,14 @@
     {
       "parameters": {
         "content": "## Abertura de Ticket",
-        "height": 224,
-        "width": 288
+        "height": 352,
+        "width": 1200,
+        "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -544,
-        -96
+        -448,
+        -256
       ],
       "typeVersion": 1,
       "id": "0116990a-afe6-47c9-9287-a92a7251c1ad",
@@ -312,7 +271,7 @@
         "responses": {
           "values": [
             {
-              "content": "=Você é um analista de suporte de TI.\n\nAnalise o chamado abaixo.\n\nTipo:\n{{ $json.tipo_chamado }}\n\nDescrição:\n{{ $json.descricao_chamado }}\n\nRetorne SOMENTE em JSON:\n\n{\n  \"categoria_chamado\": \"\",\n  \"criticidade_chamado\": \"\",\n  \"prazo_estimado\": \"\"\n}\n\nRegras:\n- Problemas em servidor, rede corporativa ou sistema parado = Crítica\n- Problemas afetando vários usuários = Alta\n- Problemas simples individuais = Baixa\n- Criticidade e prazo:Baixa\t72h, Média\t24h, Alta\t4h, Crítica\t1h\n- Criticidade apenas: Baixa, Média, Alta e Crítica"
+              "content": "=Você é um analista de suporte de TI.\n\nAnalise o chamado abaixo.\n\nTipo:\n{{ $json.tipo_chamado }}\n\nDescrição:\n{{ $json.descricao_chamado }}\n\nRetorne SOMENTE em JSON:\n\n{\n  \"categoria_chamado\": \"\",\n  \"criticidade_chamado\": \"\",\n  \"prazo_estimado\": \"\"\n}\n\nRegras:\n- Problemas em servidor, rede corporativa ou sistema parado = Crítica\n- Problemas afetando vários usuários = Alta\n- Problemas simples individuais = Baixa\n- Criticidade e prazo:Baixa\t72h, Média\t24h, Alta\t4h, Crítica\t1h\n- Criticidade apenas: Baixa, Média, Alta e Crítica\n- Categorias: Gestão de Acesso, Conectividade, Suporte (problemas relacionado a hardware/softwares na maquina do cliente), Infra (caso relacionado a servidores)"
             }
           ]
         },
@@ -322,8 +281,8 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 2.3,
       "position": [
-        -16,
-        -32
+        0,
+        -80
       ],
       "id": "76831432-679e-4744-ad47-a17fb7ad04a9",
       "name": "Message a model",
@@ -336,25 +295,628 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        336,
-        -32
+        352,
+        -80
       ],
       "id": "cf5cea0c-085f-4744-aefe-e370f96fb195",
       "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1rC-3V3xP41dk6N5m4f0AsgL-2F3mKqHlFRT5lI29By4",
+          "mode": "list",
+          "cachedResultName": "ChamadosTI",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rC-3V3xP41dk6N5m4f0AsgL-2F3mKqHlFRT5lI29By4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 663468276,
+          "mode": "list",
+          "cachedResultName": "Abertos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rC-3V3xP41dk6N5m4f0AsgL-2F3mKqHlFRT5lI29By4/edit#gid=663468276"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Ticket ID",
+              "lookupValue": "={{ $json.busca_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -48,
+        240
+      ],
+      "id": "66d68e6d-5c43-4ea3-ad03-7e6baa29b2a7",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "n0qEaDg6oplovGct",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Abertura de chamado",
+        "formDescription": "Utilize este formulário para registrar solicitações, incidentes ou dúvidas relacionadas à área de TI. Preencha as informações com o máximo de detalhes possível para agilizar o atendimento.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nome",
+              "placeholder": "Informe seu nome",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "E-mail",
+              "fieldType": "email"
+            },
+            {
+              "fieldLabel": "Tipo de chamado",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Incidente"
+                  },
+                  {
+                    "option": "Requisição"
+                  },
+                  {
+                    "option": "Acesso"
+                  },
+                  {
+                    "option": "Dúvida"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Descrição do chamado",
+              "fieldType": "textarea",
+              "placeholder": "Informe o problema",
+              "requiredField": true
+            }
+          ]
+        },
+        "responseMode": "lastNode",
+        "options": {
+          "buttonLabel": "Abrir chamado",
+          "respondWithOptions": {
+            "values": {
+              "formSubmittedText": "Seu chamado foi aberto!"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -400,
+        -80
+      ],
+      "id": "272d747a-ae23-4f24-906b-9e328d318999",
+      "name": "Abertura",
+      "webhookId": "faef12f9-5b5c-40fc-a12f-5b131a4d6237"
+    },
+    {
+      "parameters": {
+        "formTitle": "Abertura de chamado",
+        "formDescription": "Utilize este formulário para registrar solicitações, incidentes ou dúvidas relacionadas à área de TI. Preencha as informações com o máximo de detalhes possível para agilizar o atendimento.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Ticket ID",
+              "placeholder": "Informe o número do chamado",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Status",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Em andamento"
+                  },
+                  {
+                    "option": "Finalizado"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Responsável",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Notas",
+              "fieldType": "textarea",
+              "placeholder": "Adicione aqui observações"
+            }
+          ]
+        },
+        "responseMode": "lastNode",
+        "options": {
+          "buttonLabel": "Atualizar",
+          "respondWithOptions": {
+            "values": {
+              "formSubmittedText": "O status do ticket foi atualizado"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -400,
+        240
+      ],
+      "id": "1c987cf2-f73a-428c-941b-f7808a831fcf",
+      "name": "Atualizar",
+      "webhookId": "ae1f5f91-71bc-424c-987c-a4fb4a080f4b"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "36967529-4200-4681-b1eb-1bfbcbf3cfc2",
+              "name": "novo_status",
+              "value": "={{ $json.Status }}",
+              "type": "string"
+            },
+            {
+              "id": "2a76dcb4-b596-4de7-9387-3ba067f3cb3b",
+              "name": "tec_responsavel",
+              "value": "={{ $json['Responsável'] }}",
+              "type": "string"
+            },
+            {
+              "id": "9ada6468-9dd3-4358-b0e2-592e2dceb07a",
+              "name": "notas",
+              "value": "={{ $json.Notas }}",
+              "type": "string"
+            },
+            {
+              "id": "15dd1590-0fe8-4d72-85f4-ce29cf99f045",
+              "name": "busca_id",
+              "value": "={{ $json['Ticket ID'] }}",
+              "type": "string"
+            },
+            {
+              "id": "be098e93-18f6-4090-85d0-2875d30348c7",
+              "name": "teste_if",
+              "value": "Em andamento",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -224,
+        240
+      ],
+      "id": "85fa39fd-5db0-4107-8f31-0554db8d10ad",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1rC-3V3xP41dk6N5m4f0AsgL-2F3mKqHlFRT5lI29By4",
+          "mode": "list",
+          "cachedResultName": "ChamadosTI",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rC-3V3xP41dk6N5m4f0AsgL-2F3mKqHlFRT5lI29By4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 663468276,
+          "mode": "list",
+          "cachedResultName": "Abertos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rC-3V3xP41dk6N5m4f0AsgL-2F3mKqHlFRT5lI29By4/edit#gid=663468276"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Ticket ID": "={{ $('Edit Fields1').item.json.busca_id }}",
+            "Responsável": "={{ $('Edit Fields1').item.json.tec_responsavel }}",
+            "Notas": "={{ $('Edit Fields1').item.json.notas }}",
+            "Prazo": "={{ $('Get row(s) in sheet').item.json.Prazo }}",
+            "Status": "={{ $('Edit Fields1').item.json.novo_status }}",
+            "Descrição": "={{ $('Get row(s) in sheet').item.json['Descrição'] }}",
+            "Categoria": "={{ $('Get row(s) in sheet').item.json.Categoria }}",
+            "Criticidade": "={{ $('Get row(s) in sheet').item.json.Criticidade }}",
+            "Tipo": "={{ $('Get row(s) in sheet').item.json.Tipo }}",
+            "Email": "={{ $('Get row(s) in sheet').item.json.Email }}",
+            "Nome": "={{ $('Get row(s) in sheet').item.json.Nome }}",
+            "Data": "={{ $('Get row(s) in sheet').item.json.Data }}"
+          },
+          "matchingColumns": [
+            "Ticket ID"
+          ],
+          "schema": [
+            {
+              "id": "Ticket ID",
+              "displayName": "Ticket ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tipo",
+              "displayName": "Tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Criticidade",
+              "displayName": "Criticidade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Categoria",
+              "displayName": "Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Descrição",
+              "displayName": "Descrição",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Prazo",
+              "displayName": "Prazo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Responsável",
+              "displayName": "Responsável",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Notas",
+              "displayName": "Notas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        352,
+        144
+      ],
+      "id": "265401d8-258c-404e-8429-f26682a60660",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "n0qEaDg6oplovGct",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0bd39ef3-d4f8-4d30-803f-5fe5ccf18b28",
+              "leftValue": "={{ $('Edit Fields1').item.json.novo_status }}",
+              "rightValue": "={{ $('Edit Fields1').item.json.teste_if }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        128,
+        240
+      ],
+      "id": "1990a33e-ba24-4465-aae6-0ae88ff32c45",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1rC-3V3xP41dk6N5m4f0AsgL-2F3mKqHlFRT5lI29By4",
+          "mode": "list",
+          "cachedResultName": "ChamadosTI",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rC-3V3xP41dk6N5m4f0AsgL-2F3mKqHlFRT5lI29By4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 663468276,
+          "mode": "list",
+          "cachedResultName": "Abertos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rC-3V3xP41dk6N5m4f0AsgL-2F3mKqHlFRT5lI29By4/edit#gid=663468276"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Ticket ID": "={{ $('Edit Fields1').item.json.busca_id }}",
+            "Responsável": "={{ $('Edit Fields1').item.json.tec_responsavel }}",
+            "Notas": "={{ $('Edit Fields1').item.json.notas }}",
+            "Prazo": "={{ $('Get row(s) in sheet').item.json.Prazo }}",
+            "Status": "={{ $('Edit Fields1').item.json.novo_status }}",
+            "Descrição": "={{ $('Get row(s) in sheet').item.json['Descrição'] }}",
+            "Categoria": "={{ $('Get row(s) in sheet').item.json.Categoria }}",
+            "Criticidade": "={{ $('Get row(s) in sheet').item.json.Criticidade }}",
+            "Tipo": "={{ $('Get row(s) in sheet').item.json.Tipo }}",
+            "Email": "={{ $('Get row(s) in sheet').item.json.Email }}",
+            "Nome": "={{ $('Get row(s) in sheet').item.json.Nome }}",
+            "Data": "={{ $('Get row(s) in sheet').item.json.Data }}"
+          },
+          "matchingColumns": [
+            "Ticket ID"
+          ],
+          "schema": [
+            {
+              "id": "Ticket ID",
+              "displayName": "Ticket ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tipo",
+              "displayName": "Tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Criticidade",
+              "displayName": "Criticidade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Categoria",
+              "displayName": "Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Descrição",
+              "displayName": "Descrição",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Prazo",
+              "displayName": "Prazo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Responsável",
+              "displayName": "Responsável",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Notas",
+              "displayName": "Notas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        352,
+        288
+      ],
+      "id": "545d6f8b-a0fd-4dc6-9df3-05c68ae2e410",
+      "name": "Append or update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "n0qEaDg6oplovGct",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get row(s) in sheet').item.json.Email }}",
+        "subject": "=Ticket {{ $('Edit Fields1').item.json.busca_id }}",
+        "message": "=Olá {{ $('Get row(s) in sheet').item.json.Nome }},\n\nSeu chamado foi finalizado.\n\nTicket:\n{{ $('Edit Fields1').item.json.busca_id }}\n\nTécnico:\n{{ $('Edit Fields1').item.json.tec_responsavel }}\n\nObservação:\n{{ $('Edit Fields1').item.json.notas }}\n\nEquipe de TI",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        352,
+        464
+      ],
+      "id": "b090ce59-bbc5-462a-91ce-1177e415a836",
+      "name": "Send a message1",
+      "webhookId": "fc12c141-1bf1-4eb4-9f90-4efdf39cb01e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YuTGlN7AnCyST74E",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Atualização e controle de chamados",
+        "height": 496,
+        "width": 1200,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -448,
+        112
+      ],
+      "typeVersion": 1,
+      "id": "c286daaa-a307-4b06-a80b-024d9fa9c552",
+      "name": "Sticky Note1"
     }
   ],
   "connections": {
-    "On form submission": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Edit Fields": {
       "main": [
         [
@@ -397,6 +959,73 @@
         [
           {
             "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Abertura": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append or update row in sheet1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a message1",
             "type": "main",
             "index": 0
           }
