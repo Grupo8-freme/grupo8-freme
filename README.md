@@ -159,25 +159,4 @@ Abaixo estão as principais entidades do banco de dados relacional que suportam 
 
 O modelo textual abaixo representa a visualização padrão de uma OS em um terminal ou sistema legado:
 
-```text
-┌──────────────────────────────────────────────────────────────┐
-│  ⚙️ OS #245 - Maria Silva - Ar-Condicionado                  │
-├──────────────────────────────────────────────────────────────┤
-│  👤 CLIENTE: Maria Silva           📞 (11)99999-1234         │
-│  📍 ENDEREÇO: Rua das Flores, 123 - SP                    🗺️ │
-│  📅 DATA: 14/12/2024  09:30                                  ⏰ │
-│                                                              │
-│  🔧 SERVIÇO:                                                 │
-│  [x] Diagnóstico realizado                                   │
-│  [x] Troca de capacitor                                      │
-│  [ ] Recarga gás (aguardando aprova.)                        │
-│  [ ] Teste final                                             │
-│                                                              │
-│  🛠️ PEÇAS UTILIZADAS:                                        │
-│  ┌──────────────┬──────┬──────────┐                          │
-│  │ Capacitor    │ 1 un │ R$45,00  │                          │
-│  │ Freon R410A  │ 1 kg │ R$120,00 │                          │
-│  └──────────────┴──────┴──────────┘                          │
-│                                                              │
-│  💰 TOTAL: R$ 285,00  [ENVIAR ORÇAMENTO] [INICIAR SERVIÇO]   │
-└──────────────────────────────────────────────────────────────┘
+<img width="1200" height="918" alt="f65239f3-4527-4831-b929-f1d2116551a3" src="https://github.com/user-attachments/assets/f5e910d4-d60e-41b5-a371-38a0530309b8" />
