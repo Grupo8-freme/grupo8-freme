@@ -8,16 +8,6 @@ O objetivo é padronizar o atendimento, melhorar a rastreabilidade dos serviços
 
 ---
 
-## 📋 Sumário
-1. [Visão Geral do Sistema](#visão-geral-do-sistema)
-2. [Fluxo de Atendimento (Workflow)](#fluxo-de-atendimento-workflow)
-3. [Estrutura de Dados](#estrutura-de-dados)
-4. [Módulos do Sistema](#módulos-do-sistema)
-5. [Exemplo de Ordem de Serviço (OS)](#exemplo-de-ordem-de-serviço-os)
-6. [Boas Práticas de Implementação](#boas-práticas-de-implementação)
-7. [Contribuição](#contribuição)
-
----
 Descrição da Automação
 O sistema automatiza o ciclo de vida do atendimento técnico, permitindo que a equipe foque na execução do serviço enquanto a parte burocrática é executada em segundo plano.
 
@@ -119,8 +109,8 @@ O ciclo de vida do atendimento é dividido em 4 etapas principais:
 ---
 
 
-## 📄 Exemplo de Ordem de Serviço (OS)
+## 📄 Representação gráfica do fluxo N8N
 
-O modelo textual abaixo representa a visualização padrão de uma OS em um terminal ou sistema legado:
+O modelo gráfico abaixo exibe o fluxo criado para o sistema de criação e gerenciamento de OS atráves do N8N:
 
 <img width="1200" height="918" alt="f65239f3-4527-4831-b929-f1d2116551a3" src="https://github.com/user-attachments/assets/f5e910d4-d60e-41b5-a371-38a0530309b8" />
