@@ -37,9 +37,9 @@ Webhook (Trigger de Entrada): Recebe o evento de abertura ou atualização de um
 
 Transformação de Dados (Code): Concatena as informações do cliente, equipamentos e peças utilizadas no formato de Ordem de Serviço textual.
 
-Consulta de Serviços (Switch/Router): Define a próxima ação com base no status atual (ex: enviar orçamento ou iniciar o serviço).
+Validação (IA): Define a criticidade, categoria e prazo de SLA atráves da IA implementada, baseado na descrição informada pelo usuario.
 
-Notificação / Documentação: Exporta o arquivo para PDF e dispara a notificação para o cliente via API de comunicação.
+Notificação: Dispara um email para o cliente via API de comunicação no momento da abertura e conclusão da Ordem de Serviço.
 
 ---
 
@@ -49,7 +49,7 @@ Notificação / Documentação: Exporta o arquivo para PDF e dispara a notifica�
 - Organizar demandas técnicas
 - Acompanhar o status dos serviços
 - Melhorar a comunicação com o cliente
-- Gerar histórico e relatórios
+- Gerar histórico
 - Aumentar a produtividade da equipe
 
 ---
@@ -85,75 +85,39 @@ A **ordem de serviço** é o documento formal que autoriza e descreve a execuç�
 
 1. CLIENTE REGISTRA TICKET
    ↓
-2. TÉCNICO ANALISA E CRIA OS
+2. IA ANALISA E AJUSTA A O.S.
    ↓
-3. ORÇAMENTO APROVADO
+3. EXECUÇÃO DO SERVIÇO
    ↓
-4. EXECUÇÃO DO SERVIÇO
+4. CONCLUSÃO
    ↓
-5. FATURAMENTO E CONCLUIÇÃO
-   ↓
-6. AVALIAÇÃO DO CLIENTE
+5. AVISO AO CLIENTE
 
 ## 🔄 Fluxo de Atendimento (Workflow)
 
-O ciclo de vida do atendimento é dividido em 5 etapas principais:
+O ciclo de vida do atendimento é dividido em 4 etapas principais:
 
-1. **Abertura do Ticket:** Registro da solicitação pelo cliente via canal (telefone, e-mail ou portal).
-2. **Triagem e Diagnóstico:** Análise inicial da equipe de suporte para definir a prioridade e natureza do problema.
-3. **Aprovação de Orçamento:** Caso o reparo exija peças não cobertas ou seja fora de garantia, é gerado um orçamento para aprovação.
-4. **Execução do Serviço:** O técnico realiza os procedimentos necessários (reparo, troca de componentes, testes).
-5. **Encerramento e Feedback:** Finalização da OS, baixa no estoque de peças e pesquisa de satisfação.
+1. **Abertura do Ticket:** Registro da solicitação pelo cliente via formulário.
+2. **Triagem e Diagnóstico:** Análise realizada pela IA para definir a prioridade, SLA e categoria do chamado.
+3. **Execução do Serviço:** O técnico realiza os procedimentos necessários (reparo, troca de componentes, testes).
+4. **Encerramento e Feedback:** Finalização da OS e alerta via email para o cliente.
 
 ---
 
 
-- ID: TCK-001
+- ID: T260511398
 - Cliente: Mirela Dornes
-- Contato: Mirela Dornes@email.com
+- Contato: MirelaDornes@email.com
 - Problema: Notebook não liga
 - Data de abertura: 04/05/2026
-- Status: Aberto | Em andamento | Fechado
+- Categoria: Suporte | Conec | Infra | Gestão de Acessos
+- Criticidade: Baixa | Média | Alta | Critica
+- Tipo: Incidente | Requisição | Acesso | Outros
+- Prazo: 72hr | 48hr | 24hr | 1hr
+- Status: Aberto | Em andamento | Finalizado
 
 ---
 
-
-
-## 💾 Estrutura de Dados
-
-Abaixo estão as principais entidades do banco de dados relacional que suportam este sistema:
-
-### 1. Tabela: `clientes`
-* `id` (INT, PK)
-* `nome` (VARCHAR)
-* `telefone` (VARCHAR)
-* `email` (VARCHAR)
-* `endereco` (VARCHAR)
-
-### 2. Tabela: `tickets`
-* `id` (INT, PK)
-* `cliente_id` (INT, FK)
-* `titulo` (VARCHAR)
-* `descricao` (TEXT)
-* `status` (ENUM: 'Aberto', 'Em Andamento', 'Aguardando Peças', 'Concluído')
-* `data_abertura` (DATETIME)
-
-### 3. Tabela: `ordens_servico` (OS)
-* `id` (INT, PK)
-* `ticket_id` (INT, FK)
-* `data_inicio` (DATETIME)
-* `data_fim` (DATETIME)
-* `valor_servico` (DECIMAL)
-* `status_os` (ENUM: 'Diagnóstico', 'Aprovando Orçamento', 'Em Execução', 'Finalizado')
-
-### 4. Tabela: `pecas_os`
-* `id` (INT, PK)
-* `os_id` (INT, FK)
-* `nome_peca` (VARCHAR)
-* `quantidade` (INT)
-* `valor_unitario` (DECIMAL)
-
----
 
 ## 📄 Exemplo de Ordem de Serviço (OS)
 
